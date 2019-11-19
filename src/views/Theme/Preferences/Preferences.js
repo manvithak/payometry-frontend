@@ -122,12 +122,12 @@ class Questions extends Component {
                     }
                     {(question.type=='dropdown' && question.answerType=='boolean') ?
                       <Row>
-                        <Col xs="2">
+                        <Col xs="4">
                           <FormGroup style={{marginLeft: 20}}>
                             <Input type="radio" name={qindex} value="yes" onChange={(e)=>this.handleChange(e, index)}/>{' '}Yes
                           </FormGroup>
                         </Col>
-                        <Col xs="2">
+                        <Col xs="4">
                           <FormGroup>
                             <Input type="radio" name={qindex} value="no" onChange={(e)=>this.handleChange(e, index)}/>{' '}No
                           </FormGroup>
