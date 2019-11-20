@@ -157,6 +157,7 @@ class Questions extends Component {
             </Input>
           </Col>
         </Row>
+        <br />
         <h3>Preferences</h3>
         <Form>
         {
