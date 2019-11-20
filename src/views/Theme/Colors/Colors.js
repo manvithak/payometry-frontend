@@ -22,7 +22,7 @@ import {
   InputGroupButtonDropdown,
   InputGroupText,
   Label,
-  Row
+  Row, Alert
 } from 'reactstrap';
 import {addCard} from '../../../api/card';
 import PaypalExpressBtn from 'react-paypal-express-checkout';
@@ -39,7 +39,15 @@ class Forms extends Component {
       expireMonth: 1,
       expireYear: 2019,
       cvv: '',
-      alert: false
+      alert: false,
+      amount: '',
+      flat: '',
+      street: '',
+      city: '',
+      zip: '',
+      showToast: false,
+      errorToast: false,
+      apiData: {}
     };
   }
 
@@ -59,13 +67,12 @@ class Forms extends Component {
       cvv: this.state.cvv,
       amount: this.state.amount
     }
-    console.log(data)
     addCard(data, {}, (err, response) => {
       if(err){
         console.log(err)
       }else{
         this.setState({
-          showAlert: true,
+          apiData: response.data.data,
           name: '',
           cardNumber: '',
           expireMonth: 1,
@@ -77,17 +84,34 @@ class Forms extends Component {
           city: '',
           zip: '',
         })
-        this.notify()
+
+        if(response.data && response.data.data.type=='StripeCardError'){
+          this.setState({
+            errorToast: true
+          })
+        }
+        if(response.data && response.data.data.status=='succeeded'){
+          this.setState({
+            showToast: true
+          })
+        }
       }
     })
   }
 
-  notify = () => {
-    toast.success("Payment Successful", {containerId: 'A'});
+  onDismiss = () => {
+    this.setState({
+      showToast: false,
+      errorToast: false
+    })
   }
 
+  /*notify = () => {
+    toast.success("Payment Successful", {containerId: 'A'});
+  }*/
+
   render() {
-    const {amount} = this.state
+    const {amount, showToast, errorToast, apiData} = this.state
     return (
       <div className="animated fadeIn">
         <Row>
@@ -218,7 +242,32 @@ class Forms extends Component {
             </Card>
           </Col>
         </Row>
-        <ToastContainer autoClose={4000} enableMultiContainer containerId={'A'} position={toast.POSITION.TOP_RIGHT}/>
+        {/*<ToastContainer autoClose={4000} enableMultiContainer containerId={'A'} position={toast.POSITION.TOP_RIGHT}/>*/}
+        {
+          (showToast)?
+          <Row>
+            <Col xs="6">
+              <Alert color="success" toggle={this.onDismiss}>
+                <h4 className="alert-heading">Success!</h4>
+                <p>Payment Successful</p>
+              </Alert>
+            </Col>
+          </Row>
+          :null
+        }
+        {
+          (errorToast)?
+          <Row>
+            <Col xs="6">
+              <Alert color="danger" toggle={this.onDismiss}>
+                <h4 className="alert-heading">Failure!</h4>
+                <p><strong>Code:</strong>{apiData.raw.code}</p>
+                <p><strong>Message:</strong>{apiData.raw.message}</p>
+              </Alert>
+            </Col>
+          </Row>
+          :null
+        }
       </div>
     );
   }

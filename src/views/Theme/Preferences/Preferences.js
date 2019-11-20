@@ -24,7 +24,7 @@ import {
   Label,
   Row,
 } from 'reactstrap';
-import {getQuestions, saveAnswers} from '../../../api/question';
+import {getQuestions, saveAnswers, getAnswers, updateAnswers} from '../../../api/question';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -33,7 +33,10 @@ class Questions extends Component {
     super(props);
     this.state = {
       questions: [],
-      answers: []
+      apiAnswers: [],
+      answers: new Array(5).fill(''),
+      user: 'New',
+      currentUser: []
     };
   }
 
@@ -53,28 +56,36 @@ class Questions extends Component {
         })
       }
     })
+    getAnswers({}, (err, response) => {
+      if(err){
+        console.log(err)
+      }else{
+        console.log(response)
+        this.setState({
+          apiAnswers: response.data.data
+        })
+      }
+    })
   }
 
   handleChange = (e, index) => {
     let {value, name, type} = e.target;
-    /*let oldItems = this.state.answers
+    let oldItems = this.state.answers
     oldItems[index] = value
     this.setState({
         answers: oldItems
-    })*/
-
+    })
+    /*console.log(value)
     this.setState(prevState => ({
-      answers: {
-          ...prevState.answers,
-          [prevState.answers[index]]: value
-      }
-    }));
+      arrayvar: [...prevState.answers, [prevState.answers[index]]: value]
+    }));*/
   }
 
   onSubmit = () => {
-    const {answers, questions} = this.state
-    let obj = {}
+    const {answers, questions, user} = this.state
+    console.log(answers)
     let answersToSave = questions.map((question, index) => {
+      let obj = {}
       obj.id = question._id
       obj.answer = answers[index]
       return obj;
@@ -82,14 +93,47 @@ class Questions extends Component {
     let data = {
       answers: answersToSave
     }
-    saveAnswers(data, {}, (err, response) => {
-      if(err) {
-        console.log(err)
-      }
-      else{
-        console.log('merchant response saved successfully')
-        this.notify()
-      }
+    if(user == 'New') {
+      saveAnswers(data, {}, (err, response) => {
+        if(err) {
+          console.log(err)
+        }
+        else{
+          console.log('merchant response saved successfully')
+          this.setState({
+            answers: new Array(5).fill('')
+          })
+          this.notify()
+        }
+      })
+    }else{
+      data.id = user
+      updateAnswers(user, data, {}, (err,response) => {
+        if(err){
+          console.log(err)
+        }
+        else{
+          console.log('merchant response saved successfully')
+          this.setState({
+            answers: new Array(5).fill('')
+          })
+          this.notify()
+        }
+      })
+    }
+  }
+
+  userChange = (e) => {
+    let user = e.target.value
+    const {apiAnswers} = this.state
+    let list = apiAnswers.filter(item => item.merchantId == e.target.value);
+    let answers = new Array(5).fill('')
+    if(list.length > 0){
+      answers = list[0].answers.map(answer => answer.answer)
+    }
+    this.setState({
+      user: e.target.value,
+      answers: answers
     })
   }
 
@@ -98,11 +142,22 @@ class Questions extends Component {
   }
 
   render() {
-    const {questions, answers} = this.state;
+    const {questions, answers, user, apiAnswers} = this.state;
     let qindex = ''
     return (
       <div>
-        <h2>Preferences</h2>
+        <Row>
+          <Col xs="8">
+            <h3>Users</h3>
+            <Input type="select" name="user" id="user" value={user} onChange={(e) => this.userChange(e)}>
+              <option>New</option>
+              {
+                apiAnswers.map((answer, index) => <option key={index}>{answer.merchantId}</option>)
+              }
+            </Input>
+          </Col>
+        </Row>
+        <h3>Preferences</h3>
         <Form>
         {
           questions.map((question, index) => {
