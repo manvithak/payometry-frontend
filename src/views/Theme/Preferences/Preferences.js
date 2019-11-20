@@ -35,7 +35,7 @@ class Questions extends Component {
       questions: [],
       apiAnswers: [],
       answers: new Array(5).fill(''),
-      user: 'New',
+      user: 'Add New',
       currentUser: []
     };
   }
@@ -93,7 +93,7 @@ class Questions extends Component {
     let data = {
       answers: answersToSave
     }
-    if(user == 'New') {
+    if(user == 'Add New') {
       saveAnswers(data, {}, (err, response) => {
         if(err) {
           console.log(err)
@@ -150,7 +150,7 @@ class Questions extends Component {
           <Col xs="8">
             <h3>Users</h3>
             <Input type="select" name="user" id="user" value={user} onChange={(e) => this.userChange(e)}>
-              <option>New</option>
+              <option>Add New</option>
               {
                 apiAnswers.map((answer, index) => <option key={index}>{answer.merchantId}</option>)
               }
