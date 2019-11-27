@@ -133,7 +133,7 @@ class Forms extends Component {
                       onChange={(e) => this.onChange(e)}>
                         <option>Select Merchant</option>
                         {
-                          apiAnswers.map((answer, index) => <option>{answer.merchantId}</option>)
+                          apiAnswers.map((answer, index) => <option key={index}>{answer.merchantId}</option>)
                         }
                       </Input>
                     </FormGroup>

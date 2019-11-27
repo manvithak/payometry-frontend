@@ -28,6 +28,11 @@ export default {
       name: 'User Preferences',
       url: '/user-preferences',
       icon: 'icon-pencil'
+    },
+    {
+      name: 'Reports',
+      url: '/reports',
+      icon: 'icon-pencil'
     }
   ],
 };
