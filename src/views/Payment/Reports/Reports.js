@@ -1,85 +1,79 @@
 import React, {Component} from 'react';
-import {Row, Col, Card, Table} from 'reactstrap';
+import {Row, Col, Card, Table, Collapse, Button} from 'reactstrap';
 import {getReports} from '../../../api/reports';
+import ListItems from './ListItems';
 
 class Reports extends Component {
   constructor(){
     super()
     this.state = {
-      reports: []
+      reports: [],
+      totalRecords: 0,
+      skip: 0,
+      limit: 10
     }
   }
   componentWillMount(){
-    getReports({}, (err, response) => {
+    this.getData('initial')
+  }
+
+  getData = (action) => {
+    const {skip, limit} = this.state
+    let pagData = {
+      skip: skip,
+      limit: limit
+    }
+    let reports = this.state.reports
+    if(action == 'refresh'){
+      pagData.skip = 0
+      reports = []
+    }
+    getReports({}, pagData, (err, response) => {
       if(err){
         console.log(err)
       }else{
         console.log(response)
         this.setState({
-          reports: response.data.data
+          reports: reports.concat(response.data.data),
+          totalRecords: response.data.count,
+          skip: skip + 10
         })
       }
     })
   }
+
+  loadMore = () => {
+    this.getData('load');
+  }
+
+  refreshData = () => {
+    this.getData('refresh');
+  }
+
   render(){
-    const {reports} = this.state
+    const {reports, totalRecords} = this.state
     return(
       <div>
         <Row>
-          <h3>Reports</h3>
+          <Col sm="4">
+            <h3>Reports({totalRecords})</h3>
+          </Col>
+          <Col sm="8">
+            <div style={{float: 'right'}}>
+              <Button active color="success" onClick={this.refreshData}>Refresh</Button>
+            </div>
+          </Col>
         </Row>
         {
-          reports.map((report, index) =>{
-            return(
-              <Card style={{padding: 12}} key={index}>
-                <Row>
-                  <Col sm="3">
-                      <p>Merchant Id: {report.merchantId}</p>
-                  </Col>
-                  <Col sm="3">
-                    {(report.cardDetails.length > 0)? <p>Card Number: {report.cardDetails[0].cardNumber}</p>: null}
-                  </Col>
-                  <Col sm="3">
-                      <p>Total Attempts: {report.attempt}</p>
-                  </Col>
-                  <Col sm="3">
-                      <p>Amount: {report.amount}</p>
-                  </Col>
-                </Row>
-                {
-                  (report.reAttemptDetails.length > 0)?
-                    <Table>
-                    <thead>
-                      <tr>
-                        <th>Attempt</th>
-                        <th>Merchant Id</th>
-                        <th>Card Number</th>
-                        <th>Error Code</th>
-                        <th>Error Message</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        report.reAttemptDetails.map((attempt, id) => {
-                          let stripeError = JSON.parse(attempt.stripeError)
-                          return(
-                            <tr key={id}>
-                              <td>{attempt.attemptCount}</td>
-                              <td>{report.merchantId}</td>
-                              <td>{(report.cardDetails.length > 0)? <p>{report.cardDetails[0].cardNumber}</p>: null}</td>
-                              <td>{stripeError.raw.code}</td>
-                              <td>{stripeError.raw.message}</td>
-                            </tr>
-                          )
-                        })
-                      }
-                    </tbody>
-                  </Table>
-                  :null
-                }
-              </Card>
-            )
-          })
+          reports.map((report, index) => <ListItems key={index} report={report}/>)
+        }
+        <br/>
+        {
+          (totalRecords > 10)?
+          <div style={{textAlign: 'center'}}>
+            <Button active color="success" onClick={this.loadMore}>Load More</Button>
+          </div>
+          :null
         }
       </div>
     )

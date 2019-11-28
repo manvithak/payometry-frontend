@@ -11,7 +11,7 @@ import {
   Label,
   Row, Alert
 } from 'reactstrap';
-import {addCard} from '../../../api/card';
+import {addCard, getAccounts} from '../../../api/card';
 import 'react-toastify/dist/ReactToastify.css';
 import {getAnswers} from '../../../api/question';
 
@@ -29,23 +29,40 @@ class Forms extends Component {
       flat: '',
       street: '',
       city: '',
+      state: '',
       zip: '',
       showToast: false,
       errorToast: false,
       apiData: {},
       merchant: '',
-      apiAnswers: []
+      account: '',
+      apiAnswers: [],
+      apiAccounts: []
     };
   }
 
   componentWillMount() {
+    this.getData()
+  }
+
+  getData = () => {
     getAnswers({}, (err, response) => {
+      if(err){
+        console.log(err)
+      }else{
+        this.setState({
+          apiAnswers: response.data.data
+        })
+      }
+    })
+
+    getAccounts({}, (err, response) => {
       if(err){
         console.log(err)
       }else{
         console.log(response)
         this.setState({
-          apiAnswers: response.data.data
+          apiAccounts: response.data.data
         })
       }
     })
@@ -56,6 +73,35 @@ class Forms extends Component {
     this.setState({
       [name]: value
     })
+  }
+
+  selectAccount = (e) => {
+    let {value, name, type} = e.target;
+    let {apiAccounts} = this.state
+    let selectedAccount = apiAccounts.filter((account) => {
+      return account.accountName == value
+    })
+    if(selectedAccount.length > 0){
+      this.setState({
+        name: selectedAccount[0].name,
+        cardNumber: selectedAccount[0].cardNumber,
+        expireMonth: selectedAccount[0].expireMonth,
+        expireYear: selectedAccount[0].expireYear,
+        cvv: selectedAccount[0].cvv,
+        amount: selectedAccount[0].amount,
+        flat: selectedAccount[0].address1,
+        street: selectedAccount[0].address2,
+        city: selectedAccount[0].city,
+        zip: selectedAccount[0].zip,
+        state: selectedAccount[0].state,
+        [name]: value
+      })
+    }
+    else{
+      this.setState({
+        [name]: value
+      })
+    }
   }
 
   onSubmit = () => {
@@ -113,7 +159,7 @@ class Forms extends Component {
   }*/
 
   render() {
-    const {amount, showToast, errorToast, apiData, apiAnswers} = this.state
+    const {amount, showToast, errorToast, apiData, apiAnswers, apiAccounts} = this.state
     return (
       <div className="animated fadeIn">
         <Row>
@@ -128,17 +174,31 @@ class Forms extends Component {
                 <Row>
                   <Col xs="12">
                     <FormGroup>
-                      <Label htmlFor="merchant">Merchant</Label>
-                      <Input type="select" id="merchant" name = "merchant" value={this.state.merchant} placeholder="Enter your name" required
-                      onChange={(e) => this.onChange(e)}>
-                        <option>Select Merchant</option>
+                      <Label htmlFor="account">Account</Label>
+                      <Input type="select" id="account" name = "account" value={this.state.account} required
+                      onChange={(e, key) => this.selectAccount(e, key)}>
+                        <option>Select Account</option>
                         {
-                          apiAnswers.map((answer, index) => <option key={index}>{answer.merchantId}</option>)
+                          apiAccounts.map((account, index) => <option key={index}>{account.accountName}</option>)
                         }
                       </Input>
                     </FormGroup>
                   </Col>
                 </Row>
+                {/*<Row>
+                                  <Col xs="12">
+                                    <FormGroup>
+                                      <Label htmlFor="merchant">Merchant</Label>
+                                      <Input type="select" id="merchant" name = "merchant" value={this.state.merchant} placeholder="Enter your name" required
+                                      onChange={(e) => this.onChange(e)}>
+                                        <option>Select Merchant</option>
+                                        {
+                                          apiAnswers.map((answer, index) => <option key={index}>{answer.merchantId}</option>)
+                                        }
+                                      </Input>
+                                    </FormGroup>
+                                  </Col>
+                                </Row>*/}
                 <Row>
                   <Col xs="12">
                     <FormGroup>
@@ -236,7 +296,7 @@ class Forms extends Component {
                       onChange={(e) => this.onChange(e)}/>
                   </Col>
                   <Col xs="6">
-                    <Input type="text" id="zip" name = "state" value={this.state.state} placeholder="State" required
+                    <Input type="text" id="state" name = "state" value={this.state.state} placeholder="State" required
                       onChange={(e) => this.onChange(e)}/>
                   </Col>
                 </Row>
