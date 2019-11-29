@@ -23,7 +23,7 @@ class ListItems extends React.Component {
     const {report} = this.props
     const {isOpen} = this.state
     return(
-      <Card style={{padding: 12, marginBottom: 0}}>
+      <Card style={{padding: 12, marginBottom: 5}}>
         <Row>
           <Col sm="2">
             {(report.cardDetails.length > 0)? <p>Card Number<br/> ************{report.cardDetails[0].cardNumber.slice(12,16)}</p>: null}
@@ -79,7 +79,7 @@ class ListItems extends React.Component {
                         <td>{attempt.responseCodeStatus}</td>
                         <td>{stripeError.raw.message}</td>
                         <td>{report.customerOrSystemAction}</td>
-                        <td>{moment(attempt.createdAt).tz('America/New_York').format('Y-D-M hh:mm:ss')}</td>
+                        <td>{moment(attempt.createdAt).tz('America/New_York').format('Y-D-M hh:mm:ss a')}</td>
                       </tr>
                     )
                   })

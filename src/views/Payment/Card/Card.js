@@ -140,7 +140,8 @@ class Forms extends Component {
               street: '',
               city: '',
               zip: '',
-              merchant: ''
+              merchant: '',
+              account: '',
             })
           }
         }
@@ -158,7 +159,8 @@ class Forms extends Component {
             street: '',
             city: '',
             zip: '',
-            merchant: ''
+            merchant: '',
+            account: '',
           })
         }
       }
