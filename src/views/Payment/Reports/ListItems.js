@@ -44,11 +44,13 @@ class ListItems extends React.Component {
             : null
           }
           {
-            (report.stripeErrorCode)?
+            (report.stripeErrorCode && report.stripeErrorCode == 'invalid_expiry_year')?
             <Col sm="2">
+              <p><strong>Payment Gateway Error</strong> <br/>{report.stripeErrorCode} ({report.cardDetails[0].expiryYear})</p>
+            </Col>
+            :<Col sm="2">
               <p><strong>Payment Gateway Error</strong> <br/>{report.stripeErrorCode}</p>
             </Col>
-            :null
           }
           {
             (report.stripeSuccessResponse)?
@@ -94,7 +96,18 @@ class ListItems extends React.Component {
                     return(
                       <tr key={id}>
                         <td>{(attempt.attemptCount == report.maxAttemptCount) ? <p>{attempt.attemptCount}(last attempt)</p>: <p>{attempt.attemptCount}</p>}</td>
-                        <td>{(stripeError.raw)?stripeError.raw.code: '-'}</td>
+                        {
+                          (stripeError.raw && report.stripeErrorCode == 'invalid_expiry_year')?
+                          <td>{stripeError.raw.code}&nbsp;{attempt.year}</td>:null
+                        }
+                        {
+                          (stripeError.raw && report.stripeErrorCode !== 'invalid_expiry_year')?
+                          <td>{stripeError.raw.code}</td>:null
+                        }
+                        {
+                          (stripeError.status == 'succeeded' && report.stripeErrorCode == 'invalid_expiry_year')?
+                          <td>{attempt.year}</td>: null
+                        }
                         <td>{(attempt.responseCodeStatus)?attempt.responseCodeStatus: '-' }</td>
                         <td>{(stripeError.raw)?stripeError.raw.message: 'Success'}</td>
                         <td>{(attempt.stripeSuccess)?'-':report.customerOrSystemAction}</td>
