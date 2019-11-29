@@ -112,14 +112,34 @@ class Forms extends Component {
       expireYear: this.state.expireYear,
       cvv: this.state.cvv,
       amount: this.state.amount,
-      merchantId: this.state.merchant
+      merchantId: this.state.merchant,
+      address1: this.state.flat,
+      zip: this.state.zip,
+      city: this.state.city,
+      state: this.state.state
     }
     addCard(data, {}, (err, response) => {
       if(err){
         console.log(err)
       }else{
-
-        if(response.data && response.data.data.type=='StripeCardError'){
+        if(response.data && response.data.data.status=='succeeded'){
+          this.setState({
+            showToast: true,
+            apiData: response.data.data,
+            name: '',
+            cardNumber: '',
+            expireMonth: 1,
+            expireYear: 2019,
+            cvv: '',
+            amount: '',
+            flat: '',
+            street: '',
+            city: '',
+            zip: '',
+            merchant: '',
+            account: '',
+          })
+        }else{
           console.log(response.data)
           if(response.data.data.raw.code == 'ERROR_AMOUNT'){
             this.setState({
@@ -144,24 +164,6 @@ class Forms extends Component {
               account: '',
             })
           }
-        }
-        if(response.data && response.data.data.status=='succeeded'){
-          this.setState({
-            showToast: true,
-            apiData: response.data.data,
-            name: '',
-            cardNumber: '',
-            expireMonth: 1,
-            expireYear: 2019,
-            cvv: '',
-            amount: '',
-            flat: '',
-            street: '',
-            city: '',
-            zip: '',
-            merchant: '',
-            account: '',
-          })
         }
       }
     })
@@ -357,8 +359,8 @@ class Forms extends Component {
             <Col xs="6">
               <Alert color="danger" toggle={this.onDismiss}>
                 <h4 className="alert-heading">Failure!</h4>
-                <p><strong>Code:</strong>{apiData.raw.code}</p>
-                <p><strong>Message:</strong>{apiData.raw.message}</p>
+                {(apiData.raw)?<p><strong>Code:</strong>{apiData.raw.code}</p>: null}
+                {(apiData.raw)?<p><strong>Message:</strong>{apiData.raw.message}</p>:null}
               </Alert>
             </Col>
           </Row>

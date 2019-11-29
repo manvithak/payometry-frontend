@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Row, Col, Card, Table, Collapse, Button} from 'reactstrap';
 import {getReports} from '../../../api/reports';
 import ListItems from './ListItems';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Reports extends Component {
   constructor(){
@@ -37,10 +39,13 @@ class Reports extends Component {
         console.log(err)
       }else{
         console.log(response)
+        if(action == 'refresh'){
+          this.checkAllSync(response.data.data)
+        }
         this.setState({
           reports: reports.concat(response.data.data),
           totalRecords: response.data.count,
-          skip: skip + 10
+          skip: skip + 10,
         })
       }
     })
@@ -54,8 +59,20 @@ class Reports extends Component {
     this.getData('refresh');
   }
 
+  checkAllSync = (reports) => {
+    let syncArray = reports.filter(report => {
+      return (report.attempt - 1) != report.maxAttemptCount
+    })
+    console.log(syncArray.length)
+    if(syncArray.length === 0){
+      toast.success("No More Records", {containerId: 'A'});
+    }else{
+      toast.success("Data Fetched", {containerId: 'A'});
+    }
+  }
+
   render(){
-    const {reports, totalRecords, skip} = this.state
+    const {reports, totalRecords, skip, loading} = this.state
     let visibleLen = reports.length;
     return(
       <div>
@@ -75,11 +92,17 @@ class Reports extends Component {
         <br/>
         {
           (totalRecords > 10 && skip < totalRecords)?
-          <div style={{textAlign: 'center'}}>
+          <div style={{textAlign: 'center', marginBottom: 10}}>
             <Button active color="success" onClick={this.loadMore}>Load More</Button>
           </div>
           :null
         }
+        {
+          (skip > totalRecords && totalRecords > 10)?<div style={{textAlign: 'center'}}>
+            <p>No More Records</p>
+          </div>:null
+        }
+        <ToastContainer autoClose={2000} enableMultiContainer containerId={'A'} position={toast.POSITION.TOP_RIGHT}/>
       </div>
     )
   }
