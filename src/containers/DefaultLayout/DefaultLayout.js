@@ -20,8 +20,6 @@ import navigation from '../../_nav';
 // routes config
 import routes from '../../routes';
 
-import {StripeProvider} from 'react-stripe-elements';
-
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));

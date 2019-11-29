@@ -35,12 +35,6 @@ class DefaultHeader extends Component {
         </Nav>
         <Nav className="ml-auto" navbar>
 
-          <NavItem className="d-md-down-none">
-            <NavLink to="#" className="nav-link"><i className="icon-list"></i></NavLink>
-          </NavItem>
-          <NavItem className="d-md-down-none">
-            <NavLink to="#" className="nav-link"><i className="icon-location-pin"></i></NavLink>
-          </NavItem>
           <UncontrolledDropdown nav direction="down">
 
             <DropdownMenu right>
@@ -60,7 +54,6 @@ class DefaultHeader extends Component {
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>
-        <AppAsideToggler className="d-md-down-none" />
         {/*<AppAsideToggler className="d-lg-none" mobile />*/}
       </React.Fragment>
     );
