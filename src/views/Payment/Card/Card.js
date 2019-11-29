@@ -118,29 +118,47 @@ class Forms extends Component {
       if(err){
         console.log(err)
       }else{
-        this.setState({
-          apiData: response.data.data,
-          name: '',
-          cardNumber: '',
-          expireMonth: 1,
-          expireYear: 2019,
-          cvv: '',
-          amount: '',
-          flat: '',
-          street: '',
-          city: '',
-          zip: '',
-          merchant: ''
-        })
 
         if(response.data && response.data.data.type=='StripeCardError'){
-          this.setState({
-            errorToast: true
-          })
+          console.log(response.data)
+          if(response.data.data.raw.code == 'ERROR_AMOUNT'){
+            this.setState({
+              errorToast: true,
+              apiData: response.data.data,
+            })
+          }else{
+            this.setState({
+              errorToast: true,
+              apiData: response.data.data,
+              name: '',
+              cardNumber: '',
+              expireMonth: 1,
+              expireYear: 2019,
+              cvv: '',
+              amount: '',
+              flat: '',
+              street: '',
+              city: '',
+              zip: '',
+              merchant: ''
+            })
+          }
         }
         if(response.data && response.data.data.status=='succeeded'){
           this.setState({
-            showToast: true
+            showToast: true,
+            apiData: response.data.data,
+            name: '',
+            cardNumber: '',
+            expireMonth: 1,
+            expireYear: 2019,
+            cvv: '',
+            amount: '',
+            flat: '',
+            street: '',
+            city: '',
+            zip: '',
+            merchant: ''
           })
         }
       }

@@ -18,14 +18,18 @@ class Reports extends Component {
   }
 
   getData = (action) => {
-    const {skip, limit} = this.state
+    let {skip, limit} = this.state
     let pagData = {
       skip: skip,
       limit: limit
     }
     let reports = this.state.reports
     if(action == 'refresh'){
+      this.setState({
+        skip: 0
+      })
       pagData.skip = 0
+      skip = 0
       reports = []
     }
     getReports({}, pagData, (err, response) => {
@@ -51,12 +55,13 @@ class Reports extends Component {
   }
 
   render(){
-    const {reports, totalRecords} = this.state
+    const {reports, totalRecords, skip} = this.state
+    let visibleLen = reports.length;
     return(
       <div>
         <Row>
           <Col sm="4">
-            <h3>Reports({totalRecords})</h3>
+            <h3>Reports({visibleLen} / {totalRecords})</h3>
           </Col>
           <Col sm="8">
             <div style={{float: 'right'}}>
@@ -69,7 +74,7 @@ class Reports extends Component {
         }
         <br/>
         {
-          (totalRecords > 10)?
+          (totalRecords > 10 && skip < totalRecords)?
           <div style={{textAlign: 'center'}}>
             <Button active color="success" onClick={this.loadMore}>Load More</Button>
           </div>

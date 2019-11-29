@@ -32,7 +32,7 @@ class ListItems extends React.Component {
             {(report.cardDetails.length > 0)? <p>Name<br/>{report.cardDetails[0].name}</p>: null}
           </Col>
           <Col sm="1">
-            <p>Retrys <br/>{report.attempt - 1}</p>
+            <p>Retries <br/>{report.attempt - 1}</p>
           </Col>
           <Col sm="1">
             <p>Amount <br/>{report.amount}USD</p>
@@ -44,7 +44,7 @@ class ListItems extends React.Component {
             <p>Payment Gateway Error <br/>{report.stripeErrorCode}</p>
           </Col>
           <Col sm="2">
-            <p>DateTime <br/>{moment(report.createdAt).tz('America/New_York').format('Y-D-M hh:mm:ss')}</p>
+            <p>DateTime <br/>{moment(report.createdAt).tz('America/New_York').format('Y-D-M hh:mm:ss a')}</p>
           </Col>
           {
             (report.reAttemptDetails.length > 0)?
