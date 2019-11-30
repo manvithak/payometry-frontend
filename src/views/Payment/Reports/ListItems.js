@@ -75,7 +75,7 @@ class ListItems extends React.Component {
           {
             (report.stripeErrorCode && report.stripeErrorCode == 'invalid_expiry_year')?
             <Col sm="2">
-              <p className="report-font"><strong>Payment Gateway Error</strong> <br/>{report.stripeErrorCode} ({report.cardDetails[0].expiryYear})</p>
+              <p className="report-font"><strong>Payment Gateway Error</strong> <br/>{report.stripeErrorCode} ({report.initialYear})</p>
             </Col>:null
           }
           {
@@ -150,7 +150,7 @@ class ListItems extends React.Component {
                   <td className="report-font">1 (initial)</td>
                   {
                     (report.stripeErrorCode == 'invalid_expiry_year')?
-                    <td className="report-font">{report.stripeErrorCode} ({report.cardDetails[0].expiryYear})</td>
+                    <td className="report-font">{report.stripeErrorCode} ({report.initialYear})</td>
                     :<td className="report-font">{report.stripeErrorCode}</td>
                   }
                   <td className="report-font">{report.responseCodeStatus}</td>
@@ -183,7 +183,7 @@ class ListItems extends React.Component {
                         }
                         <td className="report-font">{(attempt.responseCodeStatus)?attempt.responseCodeStatus: '-' }</td>
                         <td className="report-font">{(stripeError.raw)?stripeError.raw.message: 'Success'}</td>
-                        <td className="report-font">{(attempt.stripeSuccess)?`Updated expiry year from ${report.reAttemptDetails[0].year} to ${attempt.year}`:report.customerOrSystemAction}</td>
+                        <td className="report-font">{(attempt.stripeSuccess)?`Updated expiry year from ${report.initialYear} to ${attempt.year}`:report.customerOrSystemAction}</td>
                         <td className="report-font">{moment(attempt.createdAt).tz('America/New_York').format('Y-D-M hh:mm:ss a')}</td>
                       </tr>
                     )
