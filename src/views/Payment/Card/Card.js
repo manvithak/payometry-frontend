@@ -37,7 +37,8 @@ class Forms extends Component {
       merchant: '',
       account: '',
       apiAnswers: [],
-      apiAccounts: []
+      apiAccounts: [],
+      accountId: ''
     };
   }
 
@@ -94,6 +95,7 @@ class Forms extends Component {
         city: selectedAccount[0].city,
         zip: selectedAccount[0].zip,
         state: selectedAccount[0].state,
+        accountId: selectedAccount[0]._id,
         [name]: value
       })
     }
@@ -116,7 +118,8 @@ class Forms extends Component {
       address1: this.state.flat,
       zip: this.state.zip,
       city: this.state.city,
-      state: this.state.state
+      state: this.state.state,
+      accountId: this.state.accountId
     }
     addCard(data, {}, (err, response) => {
       if(err){
