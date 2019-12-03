@@ -141,7 +141,7 @@ class ListItems extends React.Component {
                   <th className="report-font">Payment Gateway Error</th>
                   <th className="report-font">Payometry Error</th>
                   <th className="report-font">Payment Gateway Message</th>
-                  <th className="report-font">Payometry Message</th>
+                  {/*<th className="report-font">Payometry Message</th>*/}
                   <th className="report-font">Time</th>
                 </tr>
               </thead>
@@ -155,7 +155,7 @@ class ListItems extends React.Component {
                   }
                   <td className="report-font">{report.responseCodeStatus}</td>
                   <td className="report-font">{report.stripeMessage}</td>
-                  <td className="report-font">{report.customerOrSystemAction}</td>
+                  {/*<td className="report-font">{report.customerOrSystemAction}</td>*/}
                   <td className="report-font">{moment(report.createdAt).tz('America/New_York').format('Y-D-M hh:mm:ss a')}</td>
                 </tr>
                 {
@@ -183,7 +183,7 @@ class ListItems extends React.Component {
                         }
                         <td className="report-font">{(attempt.responseCodeStatus)?attempt.responseCodeStatus: '-' }</td>
                         <td className="report-font">{(stripeError.raw)?stripeError.raw.message: 'Success'}</td>
-                        <td className="report-font">{(attempt.stripeSuccess)?`Updated expiry year from ${report.initialYear} to ${attempt.year}`:report.customerOrSystemAction}</td>
+                        {/*<td className="report-font">{(attempt.stripeSuccess)?`Updated expiry year from ${report.initialYear} to ${attempt.year}`:report.customerOrSystemAction}</td>*/}
                         <td className="report-font">{moment(attempt.createdAt).tz('America/New_York').format('Y-D-M hh:mm:ss a')}</td>
                       </tr>
                     )
