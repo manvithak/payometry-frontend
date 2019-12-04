@@ -60,18 +60,19 @@ class Questions extends Component {
 
   handleChange = (e, index) => {
     let {value, name, type} = e.target;
-    console.log(value)
     let oldItems = this.state.answers
     if(index == 0){
       if(countDecimals(value) > 3){
 
       }
       else{
-        oldItems[index] = Math.abs(value)
+        if(!isNaN(value))
+        oldItems[index] = value
       }
     }
     else if(index == 3){
-      oldItems[index] = Math.abs(value)
+      if(!isNaN(value) && countDecimals(value) == 0)
+      oldItems[index] = value
     }
     else{
       oldItems[index] = value
@@ -180,12 +181,12 @@ class Questions extends Component {
                           <InputGroupAddon addonType="prepend">
                             <InputGroupText>$</InputGroupText>
                           </InputGroupAddon>
-                          <Input type="number" name={qindex} min='0' id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}/>
+                          <Input type="text" name={qindex} min='0' id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}/>
                         </InputGroup>
                       </div>
                       :null
                     }
-                    {(question.type=='number' && index != 0) ? <Input type="number" name={qindex} min='0' id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}/>: null}
+                    {(question.type=='number' && index != 0) ? <Input type="text"  name={qindex} min='0' id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}/>: null}
                     {(question.type=='dropdown' && question.answerType!='boolean')?
                       <Input type="select" name={qindex} id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}>
                         {
