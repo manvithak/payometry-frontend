@@ -102,24 +102,21 @@ class Reports extends Component {
         <div style={{marginTop: -65, position: 'absolute', right:30}}>
           <Input type="search" placeholder="search"/>
         </div>
-        <Row style={{textAlign: 'center', whiteSpace: 'nowrap'}}>
+        <Row style={{textAlign: 'center', whiteSpace: 'nowrap', marginBottom: 10}}>
           <Col sm="2">
-            <h3>Reports({visibleLen} / {totalRecords})</h3>
+            <h4>Reports({visibleLen} / {totalRecords})</h4>
           </Col>
-          <Col sm="1">
-            <p><strong>Completed:</strong>&nbsp;<span className="transac-count badge-danger">{complete}</span></p>
-          </Col>
-          <Col sm="2">
-            <p><strong>In Progress:</strong>&nbsp;<span className="transac-count badge-danger">{progress}</span></p>
-          </Col>
-          <Col sm="1">
-            <p><strong>Failed:</strong>&nbsp;<span className="transac-count badge-danger">{failure}</span></p>
-          </Col>
-          <Col sm="3">
-            <p><strong>Payment Gateway Success:</strong>&nbsp;<span className="transac-count badge-danger">{stripe}</span></p>
-          </Col>
-          <Col sm="2">
-            <p><strong>Payometry Success:</strong>&nbsp;<span className="transac-count badge-danger">{success - stripe}</span></p>
+          <Col sm="9">
+            <strong style={{paddingLeft: 15}}>Completed:</strong>&nbsp;<span className="transac-count badge-danger">{complete}</span>
+
+
+            <strong style={{paddingLeft: 15}}>In Progress:</strong>&nbsp;<span className="transac-count badge-danger">{progress}</span>
+          <strong style={{paddingLeft: 15}}>Failed:</strong>&nbsp;<span className="transac-count badge-danger">{failure}</span>
+
+
+            <strong style={{paddingLeft: 15}}>Payment Gateway Success:</strong>&nbsp;<span className="transac-count badge-danger">{stripe}</span>
+
+            <strong style={{paddingLeft: 15}}>Payometry Success:</strong>&nbsp;<span className="transac-count badge-danger">{success - stripe}</span>
           </Col>
           <Col sm="1">
             <div style={{float: 'right'}}>
