@@ -68,26 +68,26 @@ class ListItems extends React.Component {
           </Col>
           {(report.responseCodeStatus)?
             <Col sm="2">
-              <p className="report-font"><strong>Payometry Error</strong> <br/>{report.responseCodeStatus}</p>
+              <p className="report-font"><strong>Payometry Response</strong> <br/>{report.responseCodeStatus}</p>
             </Col>
             : null
           }
           {
             (report.stripeErrorCode && report.stripeErrorCode == 'invalid_expiry_year')?
             <Col sm="2">
-              <p className="report-font"><strong>Payment Gateway Error</strong> <br/>{report.stripeErrorCode} ({report.initialYear})</p>
+              <p className="report-font"><strong>Payment Gateway Response</strong> <br/>{report.stripeErrorCode} ({report.initialYear})</p>
             </Col>:null
           }
           {
             (report.stripeErrorCode && report.stripeErrorCode !== 'invalid_expiry_year')?
             <Col sm="2">
-              <p className="report-font"><strong>Payment Gateway Error</strong> <br/>{report.stripeErrorCode}</p>
+              <p className="report-font"><strong>Payment Gateway Response</strong> <br/>{report.stripeErrorCode}</p>
             </Col>:null
           }
           {
             (report.stripeSuccessResponse)?
             <Col sm="4">
-              <p style={{color: 'green'}} className="report-font"><strong>Payment Gateway Message </strong><br/>Success</p>
+              <p style={{color: 'green'}} className="report-font"><strong>Payment Gateway Response </strong><br/>Success</p>
             </Col>
             :null
           }
@@ -138,8 +138,8 @@ class ListItems extends React.Component {
               <thead>
                 <tr>
                   <th className="report-font">Attempt</th>
-                  <th className="report-font">Payment Gateway Error</th>
-                  <th className="report-font">Payometry Error</th>
+                  <th className="report-font">Payment Gateway Response</th>
+                  <th className="report-font">Payometry Response</th>
                   <th className="report-font">Payment Gateway Message</th>
                   {/*<th className="report-font">Payometry Message</th>*/}
                   <th className="report-font">Time</th>

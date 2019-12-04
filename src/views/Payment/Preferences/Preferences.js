@@ -6,11 +6,17 @@ import {
   FormGroup,
   Input,
   Label,
-  Row,
+  Row, InputGroup, InputGroupAddon, InputGroupText
 } from 'reactstrap';
 import {getQuestions, saveAnswers, getAnswers, updateAnswers} from '../../../api/question';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+const countDecimals = (value) => {
+  var char_array = value.toString().split(""); // split every single char
+  var not_decimal = char_array.lastIndexOf(".");
+  return (not_decimal<0)?0:char_array.length - not_decimal;
+}
 
 class Questions extends Component {
   constructor(props) {
@@ -18,7 +24,7 @@ class Questions extends Component {
     this.state = {
       questions: [],
       apiAnswers: [],
-      answers: new Array(5).fill(''),
+      answers: new Array(6).fill(''),
       user: 'Add New',
       currentUser: []
     };
@@ -54,8 +60,23 @@ class Questions extends Component {
 
   handleChange = (e, index) => {
     let {value, name, type} = e.target;
+    console.log(value)
     let oldItems = this.state.answers
-    oldItems[index] = value
+    if(index == 0){
+      if(countDecimals(value) > 3){
+
+      }
+      else{
+        oldItems[index] = Math.abs(value)
+      }
+    }
+    else if(index == 3){
+      oldItems[index] = Math.abs(value)
+    }
+    else{
+      oldItems[index] = value
+    }
+
     this.setState({
         answers: oldItems
     })
@@ -85,9 +106,10 @@ class Questions extends Component {
         else{
           console.log('merchant response saved successfully')
           this.setState({
-            answers: new Array(5).fill('')
+            answers: new Array(6).fill('')
           })
           this.notify()
+          this.getData()
         }
       })
     }else{
@@ -99,7 +121,7 @@ class Questions extends Component {
         else{
           console.log('merchant response saved successfully')
           this.setState({
-            answers: new Array(5).fill('')
+            answers: new Array(6).fill('')
           })
           this.notify()
         }
@@ -111,7 +133,7 @@ class Questions extends Component {
     let user = e.target.value
     const {apiAnswers} = this.state
     let list = apiAnswers.filter(item => item.merchantId == e.target.value);
-    let answers = new Array(5).fill('')
+    let answers = new Array(6).fill('')
     if(list.length > 0){
       answers = list[0].answers.map(answer => answer.answer)
     }
@@ -151,8 +173,19 @@ class Questions extends Component {
               <Row key={qindex}>
                 <Col xs="8">
                   <FormGroup>
-                    <Label htmlFor={qindex}>{question.question}</Label>
-                    {(question.type=='number') ? <Input type="number" name={qindex} id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}/>: null}
+                    {(index!=5)? <Label htmlFor={qindex}>{question.question}</Label> : null}
+                    {(question.type=='number' && index == 0) ?
+                      <div>
+                        <InputGroup>
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>$</InputGroupText>
+                          </InputGroupAddon>
+                          <Input type="number" name={qindex} min='0' id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}/>
+                        </InputGroup>
+                      </div>
+                      :null
+                    }
+                    {(question.type=='number' && index != 0) ? <Input type="number" name={qindex} min='0' id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}/>: null}
                     {(question.type=='dropdown' && question.answerType!='boolean')?
                       <Input type="select" name={qindex} id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}>
                         {
@@ -160,7 +193,7 @@ class Questions extends Component {
                         }
                       </Input>: null
                     }
-                    {(question.type=='dropdown' && question.answerType=='boolean') ?
+                    {(question.type=='dropdown' && question.answerType=='boolean' && index != 5) ?
                       <Row>
                         <Col xs="4">
                           <FormGroup style={{marginLeft: 20}}>
@@ -173,6 +206,25 @@ class Questions extends Component {
                           </FormGroup>
                         </Col>
                       </Row> :null
+                    }
+                    {
+                      (question.type=='dropdown' && question.answerType=='boolean' && this.state.answers[4] == 'yes' && index == 5)?
+                      <div>
+                        <Label htmlFor={qindex}>{question.question}</Label>
+                        <Row>
+                          <Col xs="4">
+                            <FormGroup style={{marginLeft: 20}}>
+                              <Input type="radio" name={qindex} value="yes" onChange={(e)=>this.handleChange(e, index)}/>{' '}Yes
+                            </FormGroup>
+                          </Col>
+                          <Col xs="4">
+                            <FormGroup>
+                              <Input type="radio" name={qindex} value="no" onChange={(e)=>this.handleChange(e, index)}/>{' '}No
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </div>
+                      : null
                     }
                   </FormGroup>
                 </Col>
