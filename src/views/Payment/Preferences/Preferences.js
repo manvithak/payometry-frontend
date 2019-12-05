@@ -165,7 +165,7 @@ class Questions extends Component {
           </Col>
         </Row>
         <br />
-        <h3>Preferences</h3>
+        <h3>Operational Data</h3>
         <Form>
         {
           questions.map((question, index) => {
@@ -234,7 +234,7 @@ class Questions extends Component {
           })
         }
         <Row>
-          <Col xs="6">
+          <Col xs="2">
             <Button active block color="success" onClick={this.onSubmit}>Proceed</Button>
           </Col>
         </Row>

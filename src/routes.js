@@ -11,7 +11,7 @@ const routes = [
   { path: '/theme', exact: true, name: 'Payment', component: Card },
   { path: '/add-card', name: 'Card', component: Card },
   { path: '/execute-payment', name: 'Typography', component: Typography },
-  { path: '/user-preferences', name: 'Preferences', component:Preferences },
+  { path: '/user-preferences', name: 'Operational Data', component:Preferences },
   { path: '/reports', name: 'Reports', component: Reports }
 ];
 

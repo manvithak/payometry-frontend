@@ -68,7 +68,7 @@ class DefaultLayout extends Component {
                         )} />
                     ) : (null);
                   })}
-                  <Redirect from="/" to="/add-card" />
+                  <Redirect from="/" to="/user-preferences" />
                 </Switch>
               </Suspense>
             </Container>

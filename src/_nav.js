@@ -14,18 +14,18 @@ export default {
       },
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },
-    {
+    /*{
       name: 'Pay By Card',
       url: '/add-card',
       icon: 'icon-drop',
-    },
+    },*/
     /*{
       name: 'Pay By Card',
       url: '/execute-payment',
       icon: 'icon-pencil',
     },*/
     {
-      name: 'User Preferences',
+      name: 'Operational Data',
       url: '/user-preferences',
       icon: 'icon-pencil'
     },
