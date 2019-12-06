@@ -12,19 +12,16 @@ class Billing extends Component{
   render(){
     return(
       <div>
-        <Row>
+        <Row style={{marginBottom: 20}}>
           <h3>Billing Paradigm</h3>
         </Row>
         <Row>
           <Col sm="3">
             <Card>
               <CardHeader style={{padding: 0}}>
-                <div className="fill">
-                  <img src={logo} alt="Logo"/>
-                </div>
+                <p style={{textAlign: 'center', fontSize: 18}}><strong>On-Demand</strong></p>
               </CardHeader>
               <CardBody>
-                <p style={{textAlign: 'center'}}><strong>On-Demand</strong></p>
                 <p>Uber</p>
                 <p>Lyft</p>
                 <p>Dunkin Donuts Order Ahead</p>
@@ -37,12 +34,9 @@ class Billing extends Component{
           <Col sm="3">
             <Card>
               <CardHeader style={{padding: 0}}>
-                <div className="fill">
-                  <img src={logo} alt="Logo"/>
-                </div>
+                <p style={{textAlign: 'center', fontSize: 18}}><strong>Voice / IoT</strong></p>
               </CardHeader>
               <CardBody>
-                <p style={{textAlign: 'center'}}><strong>Voice / IoT</strong></p>
                 <p>Amazon Alexa</p>
                 <p>Google Nest</p>
                 <p>GE Fridge</p>
@@ -55,12 +49,9 @@ class Billing extends Component{
           <Col sm="3">
             <Card>
               <CardHeader style={{padding: 0}}>
-                <div className="fill">
-                  <img src={logo} alt="Logo"/>
-                </div>
+                <p style={{textAlign: 'center', fontSize: 18}}><strong>1-Time Purchase / Retail</strong></p>
               </CardHeader>
               <CardBody>
-                <p style={{textAlign: 'center'}}><strong>1-Time Purchase / Retail</strong></p>
                 <p>Xbox / Microsoft Store</p>
                 <p>iTunes / App Store</p>
                 <p>Walmart Pay/Wallet</p>
@@ -73,12 +64,9 @@ class Billing extends Component{
           <Col sm="3">
             <Card>
               <CardHeader style={{padding: 0}}>
-                <div className="fill">
-                  <img src={logo} alt="Logo"/>
-                </div>
+                <p style={{textAlign: 'center', fontSize: 18}}><strong>Subscription / Continuity</strong></p>
               </CardHeader>
               <CardBody>
-                <p style={{textAlign: 'center'}}><strong>Subscription / Continuity</strong></p>
                 <p>Netflix</p>
                 <p>Blue Apron</p>
                 <p>Sony Entertainment</p>
