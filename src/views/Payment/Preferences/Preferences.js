@@ -18,15 +18,18 @@ const countDecimals = (value) => {
   return (not_decimal<0)?0:char_array.length - not_decimal;
 }
 
+const updates = ["Account Updater", "Billing Account Updater", "Card Refresher", "Dunning & Other"]
+
 class Questions extends Component {
   constructor(props) {
     super(props);
     this.state = {
       questions: [],
       apiAnswers: [],
-      answers: new Array(6).fill(''),
+      answers: new Array(4).fill(''),
       user: 'Add New',
-      currentUser: []
+      currentUser: [],
+      check: [false, false, false, false]
     };
   }
 
@@ -70,7 +73,7 @@ class Questions extends Component {
         oldItems[index] = value
       }
     }
-    else if(index == 3){
+    else if(index == 2){
       if(!isNaN(value) && countDecimals(value) == 0)
       oldItems[index] = value
     }
@@ -87,13 +90,30 @@ class Questions extends Component {
     }));*/
   }
 
+  handleCheck = (e, index) => {
+    let itemValue = this.state.check[index]
+    let oldItems = this.state.check
+    oldItems[index] = !itemValue
+    this.setState({
+      check: oldItems
+    })
+  }
+
   onSubmit = () => {
-    const {answers, questions, user} = this.state
+    const {answers, questions, user, check} = this.state
     console.log(answers)
+    let checks = check.filter((val, index) => {
+      if(val)
+        return updates[index]
+    })
     let answersToSave = questions.map((question, index) => {
       let obj = {}
       obj.id = question._id
-      obj.answer = answers[index]
+      if(index == 4){
+        obj.answer = checks
+      }else{
+        obj.answer = answers[index]
+      }
       return obj;
     })
     let data = {
@@ -107,7 +127,8 @@ class Questions extends Component {
         else{
           console.log('merchant response saved successfully')
           this.setState({
-            answers: new Array(6).fill('')
+            answers: new Array(4).fill(''),
+            check: [false, false, false, false]
           })
           this.notify()
           this.getData()
@@ -122,7 +143,8 @@ class Questions extends Component {
         else{
           console.log('merchant response saved successfully')
           this.setState({
-            answers: new Array(6).fill('')
+            answers: new Array(4).fill(''),
+            check: [false, false, false, false]
           })
           this.notify()
         }
@@ -134,22 +156,28 @@ class Questions extends Component {
     let user = e.target.value
     const {apiAnswers} = this.state
     let list = apiAnswers.filter(item => item.merchantId == e.target.value);
-    let answers = new Array(6).fill('')
+    let answers = new Array(5).fill('')
+    let check = new Array(4).fill(false)
     if(list.length > 0){
       answers = list[0].answers.map(answer => answer.answer)
     }
+    if(answers.length == 5 && Array.isArray(answers[4])){
+      check = answers[4]
+    }
     this.setState({
       user: e.target.value,
-      answers: answers
+      answers: answers,
+      check: check
     })
   }
 
   notify = () => {
+    console.log('toast')
     toast.success("Merchant response saved successfully !", {containerId: 'A'});
   }
 
   render() {
-    const {questions, answers, user, apiAnswers} = this.state;
+    const {questions, answers, user, apiAnswers, check} = this.state;
     let qindex = ''
     return (
       <div>
@@ -174,7 +202,7 @@ class Questions extends Component {
               <Row key={qindex}>
                 <Col xs="8">
                   <FormGroup>
-                    {(index!=5)? <Label htmlFor={qindex}>{question.question}</Label> : null}
+                    {(index!=4)? <Label htmlFor={qindex}>{question.question}</Label> : null}
                     {(question.type=='number' && index == 0) ?
                       <div>
                         <InputGroup>
@@ -187,14 +215,14 @@ class Questions extends Component {
                       :null
                     }
                     {(question.type=='number' && index != 0) ? <Input type="text"  name={qindex} min='0' id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}/>: null}
-                    {(question.type=='dropdown' && question.answerType!='boolean')?
+                    {(question.type=='dropdown' && question.answerType!='boolean' && index != 4)?
                       <Input type="select" name={qindex} id={qindex} value={answers[index]} onChange={(e)=>this.handleChange(e, index)}>
                         {
                           question.options.map((opt, index1) => <option key={index1}>{opt}</option>)
                         }
                       </Input>: null
                     }
-                    {(question.type=='dropdown' && question.answerType=='boolean' && index != 5) ?
+                    {(question.type=='dropdown' && question.answerType=='boolean' && index != 4) ?
                       <Row>
                         <Col xs="4">
                           <FormGroup style={{marginLeft: 20}}>
@@ -209,21 +237,21 @@ class Questions extends Component {
                       </Row> :null
                     }
                     {
-                      (question.type=='dropdown' && question.answerType=='boolean' && this.state.answers[4] == 'yes' && index == 5)?
+                      (question.type=='dropdown' && question.answerType=='text' && this.state.answers[3] == 'yes' && index == 4)?
                       <div>
                         <Label htmlFor={qindex}>{question.question}</Label>
-                        <Row>
-                          <Col xs="4">
-                            <FormGroup style={{marginLeft: 20}}>
-                              <Input type="radio" name={qindex} value="yes" onChange={(e)=>this.handleChange(e, index)}/>{' '}Yes
-                            </FormGroup>
-                          </Col>
-                          <Col xs="4">
-                            <FormGroup>
-                              <Input type="radio" name={qindex} value="no" onChange={(e)=>this.handleChange(e, index)}/>{' '}No
-                            </FormGroup>
-                          </Col>
-                        </Row>
+                        {
+                          question.options.map((opt, index1) =>
+                          <div key={index1}>
+                            <Label key={index1} style={{marginLeft: 20}}>
+                              <Input type="checkbox" checked={check[index1]} onChange={(e) => this.handleCheck(e, index1)}/>
+                              {opt}
+                            </Label>
+                            <br />
+                          </div>
+                          )
+                        }
+
                       </div>
                       : null
                     }

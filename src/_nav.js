@@ -14,6 +14,11 @@ export default {
       },
       class: ''             // optional class names space delimited list for title item ex: "text-center"
     },
+    {
+      name: 'Billing Paradigm',
+      url: '/billing',
+      icon: 'icon-drop',
+    },
     /*{
       name: 'Pay By Card',
       url: '/add-card',
